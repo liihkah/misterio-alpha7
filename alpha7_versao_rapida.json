@@ -1,0 +1,127 @@
+{
+  "tempos_ajustados": {
+    "titulo": "Mistério na Estação Alpha-7 - VERSÃO RÁPIDA",
+    "tempo_total": "45-60 minutos",
+    "urgencia": "ALTA - Sistema em colapso acelerado",
+    "fases_temporais": [
+      {
+        "fase": 1,
+        "nome": "Descoberta do Crime",
+        "duracao_minutos": 10,
+        "duracao_real": "600 segundos",
+        "objetivos": [
+          "Análise inicial da cena do crime",
+          "Identificação básica de suspeitos",
+          "Coleta de evidências primárias"
+        ],
+        "pressao_temporal": "Sistema de emergência iniciado"
+      },
+      {
+        "fase": 2,
+        "nome": "Investigação Acelerada",
+        "duracao_minutos": 15,
+        "duracao_real": "900 segundos",
+        "objetivos": [
+          "Scanner forense nos locais principais",
+          "Interrogatórios essenciais",
+          "Análise de dados da IA ARIA"
+        ],
+        "pressao_temporal": "Falhas dos sistemas começam"
+      },
+      {
+        "fase": 3,
+        "nome": "Confrontação Final",
+        "duracao_minutos": 15,
+        "duracao_real": "900 segundos",
+        "objetivos": [
+          "Síntese das evidências",
+          "Interrogatório do suspeito principal",
+          "Formulação da acusação final"
+        ],
+        "pressao_temporal": "Colapso iminente dos sistemas vitais"
+      },
+      {
+        "fase": 4,
+        "nome": "Resolução Crítica",
+        "duracao_minutos": 5,
+        "duracao_real": "300 segundos",
+        "objetivos": [
+          "Apresentação da teoria final",
+          "Confrontação com evidências",
+          "Prisão ou fuga do assassino"
+        ],
+        "pressao_temporal": "Evacuação forçada em andamento"
+      }
+    ],
+    "mecanicas_aceleradas": {
+      "scanner_quantico": {
+        "tempo_analise": "30 segundos por evidência",
+        "energia_limitada": "Apenas 8 usos totais",
+        "precisao_reduzida": "Resultados mais diretos"
+      },
+      "interrogatorios": {
+        "tempo_por_suspeito": "2-3 minutos máximo",
+        "perguntas_limitadas": "Máximo 4 perguntas por suspeito",
+        "detector_mentiras": "Resultados imediatos"
+      },
+      "comunicacao_detetives": {
+        "tempo_discussao": "1 minuto entre cada descoberta",
+        "sincronizacao_mental": "20 segundos para conectar pistas",
+        "decisoes_rapidas": "Votação instantânea em conflitos"
+      },
+      "analise_ia_aria": {
+        "processamento": "15 segundos para qualquer consulta",
+        "corrupcao_progressiva": "IA fica menos confiável com o tempo",
+        "alertas_automaticos": "Notificações de pistas críticas"
+      }
+    },
+    "sistema_pressao_temporal": {
+      "fase_1": {
+        "efeitos": ["Luzes normais", "Sistemas funcionais", "Comunicação clara"],
+        "falhas": "Nenhuma"
+      },
+      "fase_2": {
+        "efeitos": ["Luzes de emergência", "Alguns scanners falham", "Ruídos de alerta"],
+        "falhas": "10% dos sistemas"
+      },
+      "fase_3": {
+        "efeitos": ["Iluminação intermitente", "Scanner limitado", "Comunicação com ruído"],
+        "falhas": "30% dos sistemas"
+      },
+      "fase_4": {
+        "efeitos": ["Luzes vermelhas piscando", "Equipamentos críticos", "Alerta máximo"],
+        "falhas": "50% dos sistemas"
+      }
+    },
+    "eventos_tempo_real": [
+      {
+        "minuto": 5,
+        "evento": "Primeiro alerta de sistema - Oxigênio em 87%"
+      },
+      {
+        "minuto": 12,
+        "evento": "Falha parcial do sistema de gravidade"
+      },
+      {
+        "minuto": 20,
+        "evento": "Scanner quântico com energia reduzida"
+      },
+      {
+        "minuto": 25,
+        "evento": "IA ARIA apresenta primeira inconsistência"
+      },
+      {
+        "minuto": 32,
+        "evento": "Tentativa de sabotagem por suspeito"
+      },
+      {
+        "minuto": 38,
+        "evento": "Sistema de emergência ativado - evacuação iminente"
+      },
+      {
+        "minuto": 42,
+        "evento": "Último momento para fazer acusação"
+      }
+    ]
+  }
+}
