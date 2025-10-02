@@ -3,13 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mistério na Estação Alpha-7 (Rápido)</title>
+    <title>Mistério na Estação Alpha-7 - Modo Rápido</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Mistério na Estação Alpha-7 - Modo Rápido</h1>
-    <p>Bem-vindo à versão de jogo rápido. As rodadas são curtas, a pressão do tempo é alta e o sistema da estação está à beira do colapso!</p>
-    <div id="app"></div>
+    <div class="game-container">
+        <!-- HUD da Estação -->
+        <div class="station-hud">
+            <div class="hud-left">
+                <span class="station-name">🚀 ESTAÇÃO ALPHA-7</span>
+                <span class="orbit">Órbita de Júpiter • 2087</span>
+            </div>
+            <div class="hud-center">
+                <span class="emergency-status">⚠️ PROTOCOLO DE EMERGÊNCIA</span>
+                <span class="phase-timer">Fase 1: <span id="phase-timer">10:00</span></span>
+            </div>
+            <div class="hud-right">
+                <span class="oxygen">O₂: <span id="oxygen">87%</span></span>
+                <span class="systems">Sistemas: <span id="systems">100%</span></span>
+            </div>
+        </div>
+
+        <!-- Seleção de Detetive -->
+        <div id="detective-selection" class="screen active">
+            <div class="title-section">
+                <h1>DIVISÃO DE CRIMES ESPACIAIS</h1>
+                <div class="subtitle">Investigação de Homicídio • Código Vermelho</div>
+            </div>
+            
+            <div class="case-brief">
+                <div class="victim-info">
+                    <h2>👩‍🔬 Dra. Elena Vasquez</h2>
+                    <p><strong>Cargo:</strong> Chefe de Pesquisa</p>
+                    <p><strong>Status:</strong> ☠️ Encontrada morta no Laboratório Principal</p>
+                    <p><strong>Situação:</strong> Estação isolada por 8 horas devido a falha crítica</p>
+                </div>
+            </div>
+
+            <div class="detective-roles">
+                <h3>Escolha sua Especialização:</h3>
+                <div class="role-grid">
+                    <div class="role-card" data-role="alpha">
+                        <div class="role-icon">⚡</div>
+                        <h4>DETETIVE ALPHA</h4>
+                        <p>Especialista em Tecnologia</p>
+                        <ul>
+                            <li>Scanner Forense Quântico</li>
+                            <li>Análise de Sistemas</li>
+                            <li>Acesso a IA ARIA</li>
+                            <li>Decodificação Digital</li>
+                        </ul>
+                        <button class="select-role" data-role="alpha">SELECIONAR</button>
+                    </div>
+                    
+                    <div class="role-card" data-role="beta">
+                        <div class="role-icon">🧠</div>
+                        <h4>DETETIVE BETA</h4>
+                        <p>Especialista em Biomedicina</p>
+                        <ul>
+                            <li>Scanner Médico Avançado</li>
+                            <li>Análise Psicológica</li>
+                            <li>Detector de Mentiras</li>
+                            <li>Perfis Comportamentais</li>
+                        </ul>
+                        <button class="select-role" data-role="beta">SELECIONAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Investigação Principal -->
+        <div id="investigation" class="screen">
+            <div class="investigation-grid">
+                <div class="locations-panel">
+                    <h3>🗺️ Locais da Estação</h3>
+                    <div class="location-buttons">
+                        <button class="location-btn" data-location="crime-scene">🔬 Laboratório Principal</button>
+                        <button class="location-btn" data-location="command">🛸 Centro de Comando</button>
+                        <button class="location-btn" data-location="cryogenic">❄️ Módulo Criogênico</button>
+                        <button class="location-btn" data-location="medical">🏥 Centro Médico</button>
+                        <button class="location-btn" data-location="reactor">⚛️ Núcleo do Reator</button>
+                    </div>
+                </div>
+
+                <div class="main-display">
+                    <div id="location-view" class="location-display">
+                        <h2>Selecione um local para investigar</h2>
+                        <p>Use seus equipamentos especializados para encontrar pistas.</p>
+                    </div>
+                </div>
+
+                <div class="tools-panel">
+                    <h3>🔧 Equipamentos</h3>
+                    <div class="tool-buttons">
+                        <button class="tool-btn" id="scanner-btn">🔍 Scanner</button>
+                        <button class="tool-btn" id="interrogate-btn">🎤 Interrogar</button>
+                        <button class="tool-btn" id="aria-btn">🤖 IA ARIA</button>
+                        <button class="tool-btn" id="sync-btn">🔗 Sincronizar</button>
+                    </div>
+                    
+                    <div class="evidence-list">
+                        <h4>📋 Evidências:</h4>
+                        <div id="evidence-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Suspeitos -->
+        <div id="suspects" class="screen">
+            <h2>👥 Tripulação da Estação</h2>
+            <div class="suspects-grid" id="suspects-grid"></div>
+        </div>
+
+        <!-- Solução Final -->
+        <div id="solution" class="screen">
+            <h2>🎯 Teoria Final</h2>
+            <div class="solution-form">
+                <label>Assassino:</label>
+                <select id="killer-select"></select>
+                
+                <label>Método:</label>
+                <select id="method-select">
+                    <option value="">Selecione o método</option>
+                    <option value="nanotechnology">Nanotecnologia Letal</option>
+                    <option value="decompression">Despressurização</option>
+                    <option value="neural">Overdose Neural</option>
+                    <option value="radiation">Radiação</option>
+                    <option value="virus">Vírus Sintético</option>
+                </select>
+                
+                <label>Cúmplice (opcional):</label>
+                <select id="accomplice-select"></select>
+                
+                <button id="submit-solution">FAZER ACUSAÇÃO</button>
+            </div>
+        </div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
