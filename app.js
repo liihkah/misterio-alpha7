@@ -11,30 +11,56 @@ const methods = ["Nanotecnologia Letal", "Despressurização", "Overdose Neural"
 
 let selectedRole = null;
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-// Timer global (fase 1 = 10 minutos = 600s)
-let seconds = 600;
+// ---- Sistema de fases automáticas ----
+let fases = [
+  { nome: "Fase 1: Descoberta", tempo: 600 },   // 10 minutos
+  { nome: "Fase 2: Investigação", tempo: 900 }, // 15 minutos
+  { nome: "Fase 3: Confrontação", tempo: 900 }, // 15 minutos
+  { nome: "Fase 4: Resolução", tempo: 300 }     // 5 minutos
+];
+let faseAtual = 0;
+let seconds = fases[faseAtual].tempo;
 let timerInt = null;
 
 function updateTimer() {
   let min = String(Math.floor(seconds/60)).padStart(2,'0');
   let sec = String(seconds % 60).padStart(2,'0');
   document.getElementById('phase-timer').innerText = min + ':' + sec;
-  if(seconds > 0) seconds--;
+  document.querySelector('.phase-timer').childNodes[0].textContent = fases[faseAtual].nome + ': ';
+  if (seconds > 0) {
+    seconds--;
+  } else {
+    clearInterval(timerInt);
+    avancarFase();
+  }
 }
 
 function startTimer() {
   clearInterval(timerInt);
-  seconds = 600;
+  seconds = fases[faseAtual].tempo;
   updateTimer();
-  timerInt = setInterval(() => {
-    updateTimer();
-    if (seconds <= 0) clearInterval(timerInt);
-  }, 1000);
+  timerInt = setInterval(updateTimer, 1000);
+}
+
+function avancarFase() {
+  if (faseAtual < fases.length-1) {
+    faseAtual++;
+    seconds = fases[faseAtual].tempo;
+    startTimer();
+    alert(`⏳ ${fases[faseAtual].nome} iniciada!`);
+  } else {
+    document.getElementById('phase-timer').innerText = "00:00";
+    alert("⏰ O tempo acabou! Última fase encerrada.");
+    // Aqui você pode bloquear ações ou forçar a solução final.
+  }
+}
+
+// ---------------------------------------
+
+// Seletor de tela
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }
 
 // Seleção de detetive
@@ -44,7 +70,7 @@ document.querySelectorAll('.select-role').forEach(btn => {
     showScreen('investigation');
     mountSuspects();
     prepareSolutionScreen();
-    startTimer();
+    faseAtual = 0; startTimer();
   };
 });
 
@@ -63,7 +89,6 @@ function mountSuspects() {
     <button id="back-investigation" style="margin:14px 0 5px 0;padding:10px 30px;background:#32e6ff;font-weight:700;border-radius:9px;color:#032336;cursor:pointer;">
       ⬅️ Voltar
     </button>`;
-  // Botão voltar funciona mesmo em mobile/tablet
   setTimeout(()=>{
     const backBtn = document.getElementById('back-investigation');
     if(backBtn) backBtn.onclick = ()=>showScreen('investigation');
