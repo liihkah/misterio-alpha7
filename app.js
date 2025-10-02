@@ -16,6 +16,27 @@ function showScreen(id) {
   document.getElementById(id).classList.add('active');
 }
 
+// Timer global (fase 1 = 10 minutos = 600s)
+let seconds = 600;
+let timerInt = null;
+
+function updateTimer() {
+  let min = String(Math.floor(seconds/60)).padStart(2,'0');
+  let sec = String(seconds % 60).padStart(2,'0');
+  document.getElementById('phase-timer').innerText = min + ':' + sec;
+  if(seconds > 0) seconds--;
+}
+
+function startTimer() {
+  clearInterval(timerInt);
+  seconds = 600;
+  updateTimer();
+  timerInt = setInterval(() => {
+    updateTimer();
+    if (seconds <= 0) clearInterval(timerInt);
+  }, 1000);
+}
+
 // Seleção de detetive
 document.querySelectorAll('.select-role').forEach(btn => {
   btn.onclick = () => {
@@ -23,19 +44,30 @@ document.querySelectorAll('.select-role').forEach(btn => {
     showScreen('investigation');
     mountSuspects();
     prepareSolutionScreen();
+    startTimer();
   };
 });
 
-// Monta cards dos suspeitos
+// Monta cards dos suspeitos e botão voltar
 function mountSuspects() {
   const grid = document.getElementById('suspects-grid');
   if (!grid) return;
-  grid.innerHTML = suspectsData.map(s =>
-    `<div class="suspect-card"><h4>${s.emoji} ${s.nome}</h4>
-    <b>${s.cargo}</b><br>
-    <b>Motivo:</b> ${s.motivo}<br>
-    <b>Álibi:</b> ${s.alibi}</div>`
-  ).join('');
+  grid.innerHTML =
+    suspectsData.map(s =>
+      `<div class="suspect-card"><h4>${s.emoji} ${s.nome}</h4>
+        <b>${s.cargo}</b><br>
+        <b>Motivo:</b> ${s.motivo}<br>
+        <b>Álibi:</b> ${s.alibi}
+      </div>`).join('') +
+    `<div style="flex-basis:100%;height:0"></div>
+    <button id="back-investigation" style="margin:14px 0 5px 0;padding:10px 30px;background:#32e6ff;font-weight:700;border-radius:9px;color:#032336;cursor:pointer;">
+      ⬅️ Voltar
+    </button>`;
+  // Botão voltar funciona mesmo em mobile/tablet
+  setTimeout(()=>{
+    const backBtn = document.getElementById('back-investigation');
+    if(backBtn) backBtn.onclick = ()=>showScreen('investigation');
+  },100);
 }
 
 // Locais da estação
