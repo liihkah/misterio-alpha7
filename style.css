@@ -3,12 +3,177 @@ body {
   color: #e0f5ff;
   font-family: Arial, Helvetica, sans-serif;
   margin: 0;
-  padding: 2em;
+  padding: 0;
 }
-h1 {
+
+.game-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding-top: 40px;
+}
+.station-hud {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 42px;
+  background: #071b33;
   color: #91e3ff;
-  border-bottom: 2px solid #1ae5ff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 22px;
+  font-size: 13px;
+  z-index: 100;
+  border-bottom: 1px solid #1ae5ff;
 }
-#app {
-  margin-top: 2em;
+.station-name {
+  font-weight: 700;
+}
+.emergency-status {
+  color: #ff6473;
+  font-weight: bold;
+}
+.phase-timer {
+  padding-left: 20px;
+  color: #98ffbd;
+}
+.oxygen, .systems {
+  padding-left: 18px;
+}
+.screen {
+  display: none;
+  margin-top: 60px;
+}
+.screen.active {
+  display: block;
+}
+.title-section {
+  text-align: center;
+}
+.title-section h1 {
+  font-size: 2rem;
+  color: #1ae5ff;
+}
+.subtitle { color: #a7e8f0; margin-bottom: 17px; }
+.case-brief {
+  background: #06223c;
+  border-radius: 8px;
+  max-width: 420px;
+  margin: 18px auto 20px;
+  padding: 18px;
+  box-shadow: 0 2px 8px #27345230;
+}
+.victim-info h2 { color: #f8cb7e; }
+.detective-roles {
+  margin: 34px auto 14px;
+  text-align: center;
+}
+.role-grid {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.role-card {
+  background: #13253e;
+  border: 2px solid #1ae5ff;
+  border-radius: 8px;
+  width: 237px;
+  box-shadow: 0 2px 12px #0097a780;
+  padding: 12px 18px 20px;
+  margin-bottom: 18px;
+}
+.role-icon { font-size: 2.6rem; }
+.role-card h4 {
+  margin: 9px 0 7px 0;
+  color: #71deff;
+  font-size: 1.1rem;
+}
+.select-role {
+  padding: 8px 18px;
+  background: #1ae5ff;
+  border: none;
+  color: #072c37;
+  font-weight: 700;
+  border-radius: 18px;
+  font-size: 1rem;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.select-role:hover { background: #f1ff6e; }
+.investigation-grid {
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+}
+.locations-panel, .tools-panel {
+  width: 200px;
+  background: #19344a;
+  border-radius: 10px;
+  padding: 12px;
+  min-height: 350px;
+}
+.main-display {
+  flex: 1;
+  background: #0d1f39;
+  border-radius: 10px;
+  min-height: 390px;
+  padding: 18px;
+}
+.location-buttons, .tool-buttons {
+  display: flex; flex-direction: column;
+  gap: 13px; margin-bottom: 15px;
+}
+.location-btn, .tool-btn {
+  font-size: 1rem;
+  padding: 7px 9px;
+  background: #0dc6d8;
+  color: #004a66;
+  border: none;
+  border-radius: 8px;
+  margin: 2px 0;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.18s;
+}
+.location-btn:hover, .tool-btn:hover {
+  background: #f5ee7c;
+  color: #153552;
+}
+.evidence-list {
+  background: #071b27;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 0.97em;
+}
+#evidence-container {
+  min-height: 60px;
+}
+.location-display h2 { color: #32e6ff; }
+.suspects-grid {
+  display: flex; flex-wrap: wrap;
+  gap: 18px; margin-top: 24px;
+}
+.suspect-card {
+  width: 200px; background: #1b324d;
+  border: 1px solid #60d5e2;
+  border-radius: 10px;
+  padding: 7px 11px 17px;
+}
+.suspect-card h4 { color: #f1ff6e; }
+.solution-form {
+  max-width: 320px;
+  margin: 20px auto;
+  padding: 18px 0 0 0;
+}
+.solution-form label { display: block; margin: 11px 0 4px 0; }
+.solution-form select, .solution-form button {
+  width: 100%; margin-bottom: 15px; padding: 7px;
+  font-size: 1rem; border-radius: 6px;
+  border: 1px solid #78d5ef;
+}
+.solution-form button {
+  background: #1ae5ff; color: #0a2232;
+  font-weight: 700; border: none;
+  cursor: pointer;
 }
