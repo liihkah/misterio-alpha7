@@ -14,13 +14,9 @@ let selectedRole = null;
 
 // Fases e pistas específicas
 let fases = [
-  { nome: "Fase 1: Descoberta", tempo: 300,
+  { nome: "Fase 1: Descoberta", tempo: 120, // 2 min
     pistasPorLocal: {
-      "crime-scene": ["Amostras alienígenas"],
-      "command": [],
-      "cryogenic": [],
-      "medical": [],
-      "reactor": []
+      "crime-scene": ["Amostras alienígenas"]
     },
     locaisAbertos: ["crime-scene"],
     equipamentosAtivos: ["scanner-btn"]
@@ -58,7 +54,23 @@ let faseAtual = 0;
 let seconds = fases[faseAtual].tempo;
 let timerInt = null;
 
-// Atualiza timer, restrições e interface
+// Cria HTML de imagem central e dica
+function renderLaboratorio(pista=false) {
+  let imgSrc = pista ? "lab_pista.jpg" : "lab_inicial.jpg";
+  let dicaHtml = pista ? "<div class='lab-dica' style='margin-top:10px; color:#71ffcb;font-size:1.1em;text-align:center;'>Dica: Amostras alienígenas encontradas.</div>" : "";
+  let html = `
+    <div style="width:100%;text-align:center">
+      <img id="lab-img" src="${imgSrc}" alt="Laboratório Alpha-7" style="max-width:320px;border-radius:9px;box-shadow:0 0 14px #1388d7;">
+    </div>
+    <h2>Laboratório Principal</h2>
+    <p>Local da morte de Elena. Equipamentos genéticos avançados.</p>
+    ${dicaHtml}
+    <p style="opacity:.7"><i>Use o Scanner para investigar a cena.</i></p>
+  `;
+  document.getElementById('location-view').innerHTML = html;
+}
+
+// Timer/restrições
 function updateTimer() {
   let min = String(Math.floor(seconds/60)).padStart(2,'0');
   let sec = String(seconds % 60).padStart(2,'0');
@@ -80,6 +92,61 @@ function startTimer() {
   timerInt = setInterval(updateTimer, 1000);
 }
 
+// Mensagens de legenda dos bloqueados
+function criarLegendaBloqueado(id, texto) {
+  let btn = document.getElementById(id);
+  let legendaId = id + "-legenda";
+  let legenda = document.getElementById(legendaId);
+  if (!btn) return;
+  if (!btn.disabled) {
+    if (legenda) legenda.style.display = "none";
+    return;
+  }
+  if (!legenda) {
+    legenda = document.createElement("div");
+    legenda.id = legendaId;
+    legenda.innerHTML = `<span style="color:#aaa;font-size:0.89em;text-align:center;display:block;">${texto}</span>`;
+    btn.parentNode.insertBefore(legenda, btn.nextSibling);
+  }
+  legenda.style.display = "block";
+}
+
+// Atualiza recursos visualmente
+function updateRecursosEFiltros() {
+  const equipamentos = ["scanner-btn","interrogate-btn","aria-btn","sync-btn"];
+  equipamentos.forEach(id=>{
+    let el = document.getElementById(id);
+    let ativo = fases[faseAtual].equipamentosAtivos.includes(id);
+    el.disabled = !ativo;
+    el.style.opacity = ativo ? 1 : 0.5;
+    el.title = ativo ? "" : "Disponível na próxima fase";
+    criarLegendaBloqueado(id,"Disponível na fase 2");
+    if (ativo) {
+      let legenda = document.getElementById(id+"-legenda");
+      if (legenda) legenda.style.display="none";
+    }
+  });
+  document.querySelectorAll('.location-btn').forEach(btn=>{
+    let ativo = fases[faseAtual].locaisAbertos.includes(btn.dataset.location);
+    btn.disabled = !ativo;
+    btn.style.opacity = ativo ? 1 : 0.5;
+    btn.title = ativo ? "" : "Disponível na próxima fase";
+    criarLegendaBloqueado(btn.id||btn.dataset.location,"Disponível na fase 2");
+    if (ativo) {
+      let legenda = document.getElementById((btn.id||btn.dataset.location)+"-legenda");
+      if (legenda) legenda.style.display="none";
+    }
+  });
+  // Apenas imagem e instrução, sem pistas
+  if (faseAtual === 0) {
+    renderLaboratorio(false);
+    document.getElementById('evidence-container').innerHTML = `<b>Nenhuma pista exibida ainda.</b>`;
+  } else if(faseAtual === fases.length-1){
+    document.getElementById('evidence-container').innerHTML = "<b>Última fase: Prepare-se para acusar!</b>";
+  }
+}
+
+// Avançar fase automático
 function avancarFase() {
   if (faseAtual < fases.length-1) {
     faseAtual++;
@@ -89,40 +156,6 @@ function avancarFase() {
   } else {
     document.getElementById('phase-timer').innerText = "00:00";
     alert("⏰ O tempo acabou! Última fase encerrada.");
-  }
-}
-
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-// Indicação de recursos bloqueados "EM BREVE"
-function updateRecursosEFiltros() {
-  const equipamentos = ["scanner-btn","interrogate-btn","aria-btn","sync-btn"];
-  equipamentos.forEach(id=>{
-    let el = document.getElementById(id);
-    let ativo = fases[faseAtual].equipamentosAtivos.includes(id);
-    el.disabled = !ativo;
-    el.style.opacity = ativo ? 1 : 0.5;
-    el.title = ativo ? "" : "Disponível na próxima fase";
-    if (!ativo && !el.innerText.includes("(EM BREVE)")) el.innerText += " (EM BREVE)";
-    if (ativo) el.innerText = el.innerText.replace(" (EM BREVE)","");
-  });
-  document.querySelectorAll('.location-btn').forEach(btn=>{
-    let ativo = fases[faseAtual].locaisAbertos.includes(btn.dataset.location);
-    btn.disabled = !ativo;
-    btn.style.opacity = ativo ? 1 : 0.5;
-    btn.title = ativo ? "" : "Disponível na próxima fase";
-    if (!ativo && !btn.innerText.includes("💡 EM BREVE")) btn.innerText += " 💡 EM BREVE";
-    if (ativo) btn.innerText = btn.innerText.replace(" 💡 EM BREVE","");
-  });
-  // Apresenta apenas o local, sem pistas iniciais
-  let locationId = fases[faseAtual].locaisAbertos[0] || "crime-scene";
-  document.getElementById('location-view').innerHTML = `<h2>${locs[locationId].nome}</h2><p>${locs[locationId].descricao}</p><p style="opacity:.7"><i>Use o Scanner ou outro equipamento para encontrar pistas.</i></p>`;
-  document.getElementById('evidence-container').innerHTML = `<b>Nenhuma pista exibida ainda.</b>`;
-  if(faseAtual === fases.length - 1){
-    document.getElementById('evidence-container').innerHTML = "<b>Última fase: Prepare-se para acusar!</b>";
   }
 }
 
@@ -158,10 +191,11 @@ function mountSuspects() {
   },100);
 }
 
-// Locais da estação
+// Locais
 const locs = {
   "crime-scene": {
-    nome: "Laboratório Principal", evidencias: ["Amostras alienígenas", "Terminal hackeado", "Resíduo de nanobots"],
+    nome: "Laboratório Principal",
+    evidencias: ["Amostras alienígenas", "Terminal hackeado", "Resíduo de nanobots"],
     descricao: "Local da morte de Elena. Equipamentos genéticos avançados."
   },
   "command": {
@@ -182,26 +216,35 @@ const locs = {
   }
 };
 
+// Clique nos locais
 document.querySelectorAll('.location-btn').forEach(btn => {
   btn.onclick = () => {
     let locationId = btn.dataset.location;
-    document.getElementById('location-view').innerHTML = `<h2>${locs[locationId].nome}</h2><p>${locs[locationId].descricao}</p><p style="opacity:.7"><i>Use o Scanner ou outro equipamento para encontrar pistas.</i></p>`;
-    document.getElementById('evidence-container').innerHTML = `<b>Nenhuma pista exibida ainda.</b>`;
+    if(faseAtual===0 && locationId==="crime-scene"){
+      renderLaboratorio(false);
+      document.getElementById('evidence-container').innerHTML = `<b>Nenhuma pista exibida ainda.</b>`;
+    } else {
+      document.getElementById('location-view').innerHTML = `<h2>${locs[locationId].nome}</h2><p>${locs[locationId].descricao}</p><p style="opacity:.7"><i>Use o Scanner ou outro equipamento para encontrar pistas.</i></p>`;
+      document.getElementById('evidence-container').innerHTML = `<b>Nenhuma pista exibida ainda.</b>`;
+    }
   };
 });
 
-// Scanner: só mostra pistas ao clicar
+// Scanner mostra imagem alterada e pista
 document.getElementById('scanner-btn').onclick = () => {
-  let locationId = fases[faseAtual].locaisAbertos.find(loc=>!document.querySelector('.location-btn[data-location="'+loc+'"]').disabled) || "crime-scene";
-  const pistas = fases[faseAtual].pistasPorLocal[locationId] || [];
-  let html = pistas.length === 0 ? "<i>Nenhuma pista disponível neste local nesta fase.</i>" : "<ul>"+pistas.map(p=>`<li>${p}</li>`).join("")+"</ul>";
-  document.getElementById('location-view').innerHTML = `<h2>${locs[locationId].nome}</h2><p>${locs[locationId].descricao}</p>` + html;
-  document.getElementById('evidence-container').innerHTML =
-    pistas.length === 0 ? `<b>Sem pistas para mostrar.</b>` : `<b>Pistas encontradas:</b><br>`+pistas.join("<br>");
+  if(faseAtual===0) {
+    renderLaboratorio(true);
+    document.getElementById('evidence-container').innerHTML = `<b>Pista encontrada:</b> Amostras alienígenas`;
+  } else {
+    let locationId = fases[faseAtual].locaisAbertos[0];
+    const pistas = fases[faseAtual].pistasPorLocal[locationId] || [];
+    let html = pistas.length === 0 ? "<i>Nenhuma pista disponível neste local nesta fase.</i>" : "<ul>"+pistas.map(p=>`<li>${p}</li>`).join("")+"</ul>";
+    document.getElementById('location-view').innerHTML = `<h2>${locs[locationId].nome}</h2><p>${locs[locationId].descricao}</p>` + html;
+    document.getElementById('evidence-container').innerHTML =
+      pistas.length === 0 ? `<b>Sem pistas para mostrar.</b>` : `<b>Pistas encontradas:</b><br>`+pistas.join("<br>");
+  }
 };
-document.getElementById('interrogate-btn').onclick = () => {
-  showScreen('suspects');
-};
+document.getElementById('interrogate-btn').onclick = () => { showScreen('suspects'); };
 document.getElementById('aria-btn').onclick = () => {
   document.getElementById('evidence-container').innerHTML += `<div>🤖 IA ARIA: verifique logs para anomalia!</div>`;
 };
