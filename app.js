@@ -49,7 +49,10 @@ let seconds = fases[faseAtual].tempo;
 let timerInt = null;
 let selectedRole = null;
 
-// Exibe painel central com imagem e dica
+// NOVO: Array para armazenar todas as pistas encontradas
+let evidenciasDescobertas = [];
+
+// Painel central do laboratório, com possibilidade de dica
 function renderLaboratorio(pista=false){
   let imgSrc = pista ? "lab_pista.jpg" : "lab_inicial.jpg";
   let dicaHtml = pista ? "<div style='margin-top:10px; color:#71ffcb;font-size:1.1em;text-align:center;'>Dica: Amostras alienígenas encontradas.</div>" : "";
@@ -65,7 +68,7 @@ function renderLaboratorio(pista=false){
   document.getElementById('location-view').innerHTML = html;
 }
 
-// Timer, restrições, legendas e navegação
+// Timer
 function updateTimer(){
   let min = String(Math.floor(seconds/60)).padStart(2,'0');
   let sec = String(seconds%60).padStart(2,'0');
@@ -81,6 +84,7 @@ function startTimer(){
   timerInt = setInterval(updateTimer,1000);
 }
 
+// Legenda de bloqueados
 function criarLegendaBloqueado(id,texto){
   let btn = document.getElementById(id);
   let legendaId = id+"-legenda";
@@ -96,6 +100,19 @@ function criarLegendaBloqueado(id,texto){
   legenda.style.display="block";
 }
 
+// Painel de evidências (agora mostrando todas acumuladas)
+function atualizarPainelEvidencias() {
+  if (evidenciasDescobertas.length === 0) {
+    document.getElementById('evidence-container').innerHTML = `<b>Nenhuma pista exibida ainda.</b>`;
+  } else {
+    document.getElementById('evidence-container').innerHTML =
+      `<b>Pistas encontradas:</b><ul>` +
+      evidenciasDescobertas.map(p => `<li>${p}</li>`).join('') +
+      `</ul>`;
+  }
+}
+
+// Atualiza botões e central
 function updateRecursosEFiltros(){
   const equipamentos = ["scanner-btn","interrogate-btn","aria-btn","sync-btn"];
   equipamentos.forEach(id=>{
@@ -111,34 +128,46 @@ function updateRecursosEFiltros(){
     criarLegendaBloqueado(btn.id||btn.dataset.location,"Disponível na fase 2");
     if(ativo){let legenda=document.getElementById((btn.id||btn.dataset.location)+"-legenda"); if(legenda) legenda.style.display="none";}
   });
-  if(faseAtual===0){renderLaboratorio(false);document.getElementById('evidence-container').innerHTML=`<b>Nenhuma pista exibida ainda.</b>`;}
+  // Central da fase 1
+  if(faseAtual===0){renderLaboratorio(false);}
   else if(faseAtual===fases.length-1){document.getElementById('evidence-container').innerHTML="<b>Última fase: Prepare-se para acusar!</b>";}
+  // Sempre atualiza painel lateral de evidências
+  atualizarPainelEvidencias();
 }
 
+// Avança a fase
 function avancarFase(){
-  if(faseAtual<fases.length-1){faseAtual++;seconds=fases[faseAtual].tempo;startTimer();alert(`⏳ ${fases[faseAtual].nome} iniciada!`);}
-  else{document.getElementById('phase-timer').innerText="00:00";alert("⏰ O tempo acabou! Última fase encerrada.");}
+  if(faseAtual<fases.length-1){
+    faseAtual++;seconds=fases[faseAtual].tempo;
+    startTimer();alert(`⏳ ${fases[faseAtual].nome} iniciada!`);
+  }else{
+    document.getElementById('phase-timer').innerText="00:00";
+    alert("⏰ O tempo acabou! Última fase encerrada.");
+  }
 }
 
+// Navegação
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(e=>e.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
-// ESCOLHA DE DETETIVE: sempre dispara ao clicar (corrigido)
+// Escolha do detetive
 window.addEventListener("DOMContentLoaded",()=>{
   document.querySelectorAll('.select-role').forEach(btn=>{
     btn.onclick=()=>{
       selectedRole=btn.dataset.role;
+      evidenciasDescobertas = []; // ao iniciar nova partida, limpa o histórico!
       showScreen('investigation');
       mountSuspects();
       prepareSolutionScreen();
       faseAtual=0; startTimer();
+      atualizarPainelEvidencias();
     };
   });
 });
 
-// Suspeitos e voltar
+// Suspeitos e botão de voltar
 function mountSuspects(){
   const grid=document.getElementById('suspects-grid');
   if(!grid) return;
@@ -190,26 +219,28 @@ document.querySelectorAll('.location-btn').forEach(btn=>{
     let locationId=btn.dataset.location;
     if(faseAtual===0 && locationId==="crime-scene"){
       renderLaboratorio(false);
-      document.getElementById('evidence-container').innerHTML=`<b>Nenhuma pista exibida ainda.</b>`;
     }else{
       document.getElementById('location-view').innerHTML = `<h2>${locs[locationId].nome}</h2><p>${locs[locationId].descricao}</p><p style="opacity:.7"><i>Use o Scanner ou outro equipamento para encontrar pistas.</i></p>`;
-      document.getElementById('evidence-container').innerHTML=`<b>Nenhuma pista exibida ainda.</b>`;
     }
+    atualizarPainelEvidencias();
   };
 });
 
-// Scanner: mostra imagem alterada e pista na fase 1
+// Scanner: salva pistas e mantém acumuladas
 document.getElementById('scanner-btn').onclick=()=>{
+  let locationId = fases[faseAtual].locaisAbertos[0];
+  const pistas = fases[faseAtual].pistasPorLocal[locationId] || [];
+  pistas.forEach(pista => {
+    if (!evidenciasDescobertas.includes(pista)) evidenciasDescobertas.push(pista);
+  });
+  // Atualiza central visual
   if(faseAtual===0){
     renderLaboratorio(true);
-    document.getElementById('evidence-container').innerHTML=`<b>Pista encontrada:</b> Amostras alienígenas`;
   }else{
-    let locationId=fases[faseAtual].locaisAbertos[0];
-    const pistas=fases[faseAtual].pistasPorLocal[locationId]||[];
     let html = pistas.length===0 ? "<i>Nenhuma pista disponível neste local nesta fase.</i>" : "<ul>"+pistas.map(p=>`<li>${p}</li>`).join("")+"</ul>";
     document.getElementById('location-view').innerHTML = `<h2>${locs[locationId].nome}</h2><p>${locs[locationId].descricao}</p>` + html;
-    document.getElementById('evidence-container').innerHTML = pistas.length===0 ? `<b>Sem pistas para mostrar.</b>` : `<b>Pistas encontradas:</b><br>`+pistas.join("<br>");
   }
+  atualizarPainelEvidencias();
 };
 document.getElementById('interrogate-btn').onclick=()=>{showScreen('suspects');};
 document.getElementById('aria-btn').onclick=()=>{document.getElementById('evidence-container').innerHTML+=`<div>🤖 IA ARIA: verifique logs para anomalia!</div>`;};
