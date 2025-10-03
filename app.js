@@ -1,5 +1,5 @@
 const suspectsData = [
-  { nome: "Comandante Sarah Chen", cargo: "Comandante da Estação", motivo: "Elena questionava suas decisões", alibi: "Centro de Comando", emoji: "⚔️" },
+  { nome: "Comandante Sarah Chen", cargo: "Comandante", motivo: "Elena questionava suas decisões", alibi: "Centro de Comando", emoji: "⚔️" },
   { nome: "Dr. Marcus Webb", cargo: "Biólogo Chefe", motivo: "Experimentos não autorizados", alibi: "Módulo de Criogenia", emoji: "🔬" },
   { nome: "Yuki Tanaka", cargo: "Engenheira de Sistemas", motivo: "Acesso IA ARIA bloqueado", alibi: "Núcleo Central", emoji: "🔧" },
   { nome: "Viktor Petrov", cargo: "Piloto Chefe", motivo: "Contrabando descoberto", alibi: "Hangar", emoji: "🚀" },
@@ -7,6 +7,7 @@ const suspectsData = [
   { nome: "James Rodriguez", cargo: "Chefe de Segurança", motivo: "Falhas que escondeu", alibi: "Corredores", emoji: "🔒" },
   { nome: "Zara Al-Rashid", cargo: "Criogenia", motivo: "Rivalidade científica", alibi: "Câmaras criogênicas", emoji: "🧊" }
 ];
+
 const methods = ["Nanotecnologia Letal", "Despressurização", "Overdose Neural", "Radiação", "Vírus Sintético"];
 
 let fases = [
@@ -46,12 +47,15 @@ let faseAtual = 0;
 let seconds = fases[faseAtual].tempo;
 let timerInt = null;
 let selectedRole = null;
-let evidenciasDescobertas = []; // Acumular as pistas
+let evidenciasDescobertas = [];
+let pistaLabAtivada = false;
 
-// Painel central do laboratório, com PNG
-function renderLaboratorio(pista=false){
-  let imgSrc = pista ? "lab_pista.png" : "lab_inicial.png";
-  let dicaHtml = pista ? "<div style='margin-top:10px; color:#71ffcb;font-size:1.1em;text-align:center;'>Dica: Amostras alienígenas encontradas.</div>" : "";
+// Painel central do laboratório, sempre verifica se pista foi achada
+function renderLaboratorio(){
+  let imgSrc = pistaLabAtivada ? "lab_pista.png" : "lab_inicial.png";
+  let dicaHtml = pistaLabAtivada
+    ? "<div style='margin-top:10px; color:#71ffcb;font-size:1.1em;text-align:center;'>Dica: Amostras alienígenas encontradas.</div>"
+    : "";
   let html = `
     <div style="width:100%;text-align:center">
       <img id="lab-img" src="${imgSrc}" alt="Laboratório Alpha-7" style="max-width:320px;border-radius:9px;box-shadow:0 0 14px #1388d7;">
@@ -64,7 +68,6 @@ function renderLaboratorio(pista=false){
   document.getElementById('location-view').innerHTML = html;
 }
 
-// Timer
 function updateTimer(){
   let min = String(Math.floor(seconds/60)).padStart(2,'0');
   let sec = String(seconds%60).padStart(2,'0');
@@ -121,8 +124,6 @@ function updateRecursosEFiltros(){
     criarLegendaBloqueado(btn.id||btn.dataset.location,"Disponível na fase 2");
     if(ativo){let legenda=document.getElementById((btn.id||btn.dataset.location)+"-legenda"); if(legenda) legenda.style.display="none";}
   });
-  if(faseAtual===0){renderLaboratorio(false);}
-  else if(faseAtual===fases.length-1){document.getElementById('evidence-container').innerHTML="<b>Última fase: Prepare-se para acusar!</b>";}
   atualizarPainelEvidencias();
 }
 
@@ -141,17 +142,18 @@ function showScreen(id){
   document.getElementById(id).classList.add('active');
 }
 
-// Escolha do detetive
 window.addEventListener("DOMContentLoaded",()=>{
   document.querySelectorAll('.select-role').forEach(btn=>{
     btn.onclick=()=>{
       selectedRole=btn.dataset.role;
       evidenciasDescobertas = [];
+      pistaLabAtivada = false;
       showScreen('investigation');
       mountSuspects();
       prepareSolutionScreen();
       faseAtual=0; startTimer();
       atualizarPainelEvidencias();
+      renderLaboratorio();
     };
   });
 });
@@ -200,13 +202,16 @@ const locs = {
   }
 };
 
+// Sempre renderiza imagem correta ao clicar no laboratório
 document.querySelectorAll('.location-btn').forEach(btn=>{
   btn.onclick=()=>{
-    let locationId=btn.dataset.location;
-    if(faseAtual===0 && locationId==="crime-scene"){
-      renderLaboratorio(false);
-    }else{
-      document.getElementById('location-view').innerHTML = `<h2>${locs[locationId].nome}</h2><p>${locs[locationId].descricao}</p><p style="opacity:.7"><i>Use o Scanner ou outro equipamento para encontrar pistas.</i></p>`;
+    let locationId = btn.dataset.location;
+    if(locationId === "crime-scene"){
+      renderLaboratorio();
+    } else {
+      document.getElementById('location-view').innerHTML =
+        `<h2>${locs[locationId].nome}</h2><p>${locs[locationId].descricao}</p>
+        <p style="opacity:.7"><i>Use o Scanner ou outro equipamento para encontrar pistas.</i></p>`;
     }
     atualizarPainelEvidencias();
   };
@@ -217,9 +222,10 @@ document.getElementById('scanner-btn').onclick=()=>{
   const pistas = fases[faseAtual].pistasPorLocal[locationId] || [];
   pistas.forEach(pista => {
     if (!evidenciasDescobertas.includes(pista)) evidenciasDescobertas.push(pista);
+    if(locationId === "crime-scene" && pista === "Amostras alienígenas") pistaLabAtivada = true;
   });
-  if(faseAtual===0){
-    renderLaboratorio(true);
+  if(locationId === "crime-scene"){
+    renderLaboratorio();
   }else{
     let html = pistas.length===0 ? "<i>Nenhuma pista disponível neste local nesta fase.</i>" : "<ul>"+pistas.map(p=>`<li>${p}</li>`).join("")+"</ul>";
     document.getElementById('location-view').innerHTML = `<h2>${locs[locationId].nome}</h2><p>${locs[locationId].descricao}</p>` + html;
