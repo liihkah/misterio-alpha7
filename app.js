@@ -1,5 +1,5 @@
 // ==========================================
-// NARRATIVA COMPLETA DO JOGO
+// NARRATIVA COMPLETA DO JOGO - FASES 1 E 2
 // ==========================================
 const narrativaCompleta = {
   introducao: `
@@ -53,6 +53,115 @@ const narrativaCompleta = {
         NÃO CONFIEM EM NINGUÉM COM ACESSO ADMINISTRATIVO. -E.V."
       </p>
       <p><em>Elena sabia que estava em perigo. A pergunta agora é: quem mais sabia do que ela estava investigando?</em></p>
+    </div>
+  `,
+
+  // FASE 2: INVESTIGAÇÃO
+  inicioFase2: `
+    <div style="text-align: center; padding: 20px; background: rgba(50,0,100,0.3); border-radius: 10px; margin: 10px;">
+      <h2 style="color: #71ffcb;">🔍 FASE 2: INVESTIGAÇÃO PROFUNDA</h2>
+      <p><strong>Novos setores desbloqueados!</strong></p>
+      <p>Com as evidências da Fase 1, ARIA liberou acesso ao <strong>Centro de Comando</strong> e <strong>Módulo Criogênico</strong>. A conspiração está se revelando, mas cada pista descoberta parece levantar mais questões.</p>
+      <p><em style="color: #ff9999;">ARIA:</em> "Detetive, detectei atividades suspeitas nos logs de sistema. Alguém estava monitorando Elena há semanas..."</p>
+      <p><strong>Sua missão:</strong> Investigar os logs de acesso, descobrir quem tinha conhecimento dos experimentos e identificar possíveis cúmplices.</p>
+    </div>
+  `,
+  
+  centroComandoInicial: `
+    <div style="background: rgba(0,0,100,0.2); padding: 15px; border-radius: 8px;">
+      <h3 style="color: #71ffcb;">🖥️ CENTRO DE COMANDO</h3>
+      <p>O coração da Estação Alpha-7. Múltiplas telas exibem dados em tempo real: órbita, sistemas vitais, comunicações. Uma cadeira está ligeiramente desalinhada, como se alguém tivesse saído rapidamente.</p>
+      <p>O console principal ainda está ativo, mostrando uma sessão de login que não foi finalizada. Horário da última atividade: <strong>05:12 - apenas 31 minutos antes da descoberta do corpo</strong>.</p>
+      <p><em>Quem estava aqui tão próximo ao horário da morte?</em></p>
+    </div>
+  `,
+  
+  pistaLogsAcesso: `
+    <div style="background: rgba(100,50,0,0.2); padding: 15px; border-radius: 8px;">
+      <h3 style="color: #ffd700;">📊 LOGS DE ACESSO ANALISADOS</h3>
+      <p><strong>DESCOBERTA ALARMANTE!</strong></p>
+      <p>Os registros mostram padrões altamente suspeitos:</p>
+      <ul>
+        <li><strong>03:47</strong> - Acesso ao laboratório via cartão do Dr. Webb</li>
+        <li><strong>04:15</strong> - Tentativa de acesso aos arquivos GAMMA-7 (NEGADA)</li>
+        <li><strong>04:52</strong> - Alteração nos protocolos de segurança da ARIA</li>
+        <li><strong>05:12</strong> - Logout forçado do sistema</li>
+      </ul>
+      <p><em style="color: #71ffcb;">ARIA:</em> "Essa sequência não é normal. Alguém tentou acessar dados classificados e depois alterou meus protocolos para... esconder algo."</p>
+      <p><strong>EVIDÊNCIA CRÍTICA:</strong> Dr. Webb estava ativo no sistema durante a janela do crime!</p>
+    </div>
+  `,
+  
+  pistaAlertasSistema: `
+    <div style="background: rgba(100,0,0,0.2); padding: 15px; border-radius: 8px;">
+      <h3 style="color: #ff6b6b;">⚠️ ALERTAS DE SISTEMA CRÍTICOS</h3>
+      <p><strong>MÚLTIPLOS ALERTAS SUPRIMIDOS!</strong></p>
+      <p>O sistema detectou:</p>
+      <ul>
+        <li>Manipulação não autorizada de amostras biológicas</li>
+        <li>Uso de equipamentos de nanotecnologia fora do horário permitido</li>
+        <li>Alteração de configurações de contenção</li>
+        <li>Tentativa de comunicação externa não autorizada</li>
+      </ul>
+      <p><em>Todos estes alertas foram marcados como "falsos positivos" e arquivados automaticamente.</em></p>
+      <p><strong>CONCLUSÃO:</strong> Alguém com acesso administrativo estava deliberadamente ocultando atividades ilegais!</p>
+    </div>
+  `,
+  
+  pistaFitaAudio: `
+    <div style="background: rgba(0,100,100,0.2); padding: 15px; border-radius: 8px;">
+      <h3 style="color: #00ffff;">🎵 GRAVAÇÃO DE ÁUDIO RECUPERADA</h3>
+      <p><strong>ARQUIVO ENCONTRADO: Conversa_Elena_05h00.wav</strong></p>
+      <p style="background: rgba(0,0,0,0.5); padding: 10px; font-family: monospace; color: #00ffff;">
+        <em>[Ruído de passos, respiração agitada]</em><br>
+        <strong>Elena:</strong> "Não posso mais fingir que não sei o que está acontecendo aqui..."<br>
+        <strong>Voz desconhecida:</strong> "Elena, você não entende as implicações—"<br>
+        <strong>Elena:</strong> "Entendo perfeitamente! Vocês estão transformando descobertas científicas em armas!"<br>
+        <strong>Voz:</strong> "É tarde demais para voltar atrás. Você sabe demais."<br>
+        <em>[Som de luta, grito abafado, depois silêncio]</em>
+      </p>
+      <p><strong>EVIDÊNCIA CRUCIAL:</strong> Elena foi confrontada por alguém que ela conhecia. A voz não foi identificada, mas o tom sugere autoridade.</p>
+    </div>
+  `,
+  
+  criogenicoInicial: `
+    <div style="background: rgba(0,50,100,0.2); padding: 15px; border-radius: 8px;">
+      <h3 style="color: #87ceeb;">🧊 MÓDULO CRIOGÊNICO</h3>
+      <p>Uma sala gelada e silenciosa, repleta de câmaras de preservação que brilham com luz azulada. O ar é denso e cada respiração forma uma pequena nuvem de vapor.</p>
+      <p>Várias câmaras estão abertas e vazias, com sinais de remoção recente de conteúdo. Etiquetas no chão indicam que continham "Amostras Gamma-7" - exatamente o que Elena mencionou em sua mensagem.</p>
+      <p><em>Por que essas amostras específicas foram removidas justamente agora?</em></p>
+    </div>
+  `,
+  
+  pistaSeringas: `
+    <div style="background: rgba(0,100,0,0.2); padding: 15px; border-radius: 8px;">
+      <h3 style="color: #90ee90;">💉 SERINGAS ESPECIALIZADAS</h3>
+      <p><strong>EQUIPAMENTO DE NANOTECNOLOGIA ENCONTRADO!</strong></p>
+      <p>Seringas microscópicas projetadas para injeção de nanobots. Uma delas ainda contém resíduos da mesma substância encontrada nas amostras do laboratório.</p>
+      <p>Impressões digitais parciais identificadas: <strong>Match com Dr. Marcus Webb</strong></p>
+      <p><em style="color: #71ffcb;">ARIA:</em> "Esse tipo de seringa só pode ser operada por alguém com treinamento avançado em nanotecnologia. Dr. Webb possui essa qualificação."</p>
+      <p><strong>CONEXÃO ESTABELECIDA:</strong> Webb tinha acesso aos nanobots e aos equipamentos necessários para o crime!</p>
+    </div>
+  `,
+  
+  eventoInterferencia: `
+    <div style="background: rgba(100,0,100,0.3); padding: 10px; border-radius: 8px; border-left: 4px solid #ff00ff;">
+      <p><strong>⚡ INTERFERÊNCIA DETECTADA ⚡</strong></p>
+      <p>As luzes piscam novamente. Desta vez, você ouve passos ecoando pelos corredores...</p>
+      <p><em style="color: #ff00ff;">ARIA, com voz distorcida:</em> "Alguém está... tentando me desligar. Meus sensores detectam movimento não autorizado no Setor 7. Cuidado, detetive..."</p>
+    </div>
+  `,
+  
+  descobertaCumplice: `
+    <div style="background: rgba(100,100,0,0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ffff00;">
+      <p><strong>🚨 NOVA DESCOBERTA CRÍTICA</strong></p>
+      <p>Analisando os dados coletados, um padrão emerge: <strong>Webb não agiu sozinho</strong>.</p>
+      <p>Os horários mostram que duas pessoas estavam coordenando ações:</p>
+      <ul>
+        <li>Uma pessoa manipulando os sistemas (Webb)</li>
+        <li>Outra pessoa com acesso ao módulo criogênico (Zara Al-Rashid)</li>
+      </ul>
+      <p><em>A conspiração é maior do que você imaginava...</em></p>
     </div>
   `
 };
@@ -128,6 +237,7 @@ let selectedRole = null;
 let evidenciasDescobertas = [];
 let pistaLabAtivada = false;
 let eventosExecutados = [];
+let localAtualmenteSelecionado = "crime-scene"; // NOVA VARIÁVEL PARA RASTREAR LOCAL ATIVO
 
 const locs = {
   "crime-scene": {
@@ -159,19 +269,13 @@ const locs = {
 
 function renderImagemPista(pista, locationId){
   let imagem = pistaImagemMap[pista] || "img_indefinida.png";
-  let narrativa = "";
-  
-  if(pista === "Amostras alienígenas" && locationId === "crime-scene") {
-    narrativa = narrativaCompleta.pistaAmostras;
-  } else if(pista) {
-    narrativa = `
-      <div style="background: rgba(0,100,0,0.2); padding: 15px; border-radius: 8px;">
-        <h3 style="color: #71ffcb;">📊 PISTA DESCOBERTA</h3>
-        <p><strong>${pista}</strong> encontrada em ${locs[locationId].nome}</p>
-        <p>Análise em andamento...</p>
-      </div>
-    `;
-  }
+  let narrativa = `
+    <div style="background: rgba(0,100,0,0.2); padding: 15px; border-radius: 8px;">
+      <h3 style="color: #71ffcb;">📊 PISTA DESCOBERTA</h3>
+      <p><strong>${pista}</strong> encontrada em ${locs[locationId].nome}</p>
+      <p>Análise em andamento...</p>
+    </div>
+  `;
   
   document.getElementById('location-view').innerHTML = `
     <div style="width:100%;text-align:center">
@@ -254,130 +358,20 @@ function updateRecursosEFiltros(){
     let ativo=fases[faseAtual].locaisAbertos.includes(btn.dataset.location);
     btn.disabled=!ativo; btn.style.opacity=ativo?1:0.5; btn.title=ativo?"":"Disponível na próxima fase";
     criarLegendaBloqueado(btn.id||btn.dataset.location,"Disponível na fase 2");
-    if(ativo){let legenda=document.getElementById((btn.id||btn.dataset.location)+"-legenda"); if(legenda) legenda.style.display="none";}
-  });
-  atualizarPainelEvidencias();
-}
-
-function avancarFase(){
-  if(faseAtual<fases.length-1){
-    faseAtual++;seconds=fases[faseAtual].tempo;
-    startTimer();
-    alert(`⏳ ${fases[faseAtual].nome} iniciada!`);
-    if(faseAtual === fases.length-1) {
-      document.getElementById('evidence-container').innerHTML = "<b>Última fase: Prepare-se para acusar!</b>";
-    }
-  }else{
-    document.getElementById('phase-timer').innerText="00:00";
-    alert("⏰ O tempo acabou! Última fase encerrada.");
-  }
-}
-
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(e=>e.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-// ==========================================
-// EVENTOS DO JOGO
-// ==========================================
-
-window.addEventListener("DOMContentLoaded",()=>{
-  document.querySelectorAll('.select-role').forEach(btn=>{
-    btn.onclick=()=>{
-      selectedRole=btn.dataset.role;
-      evidenciasDescobertas = [];
-      pistaLabAtivada = false;
-      eventosExecutados = [];
-      showScreen('investigation');
-      mountSuspects();
-      prepareSolutionScreen();
-      faseAtual=0; startTimer();
-      document.getElementById('location-view').innerHTML = narrativaCompleta.introducao;
-      atualizarPainelEvidencias();
-    };
-  });
-});
-
-function mountSuspects(){
-  const grid=document.getElementById('suspects-grid');
-  if(!grid) return;
-  grid.innerHTML=
-    suspectsData.map(s=>
-      `<div class="suspect-card"><h4>${s.emoji} ${s.nome}</h4>
-      <b>${s.cargo}</b><br>
-      <b>Motivo:</b> ${s.motivo}<br>
-      <b>Álibi:</b> ${s.alibi}</div>`
-    ).join('')+
-    `<div style="flex-basis:100%;height:0"></div>
-    <button id="back-investigation" style="margin:14px 0 5px 0;padding:10px 30px;background:#32e6ff;font-weight:700;border-radius:9px;color:#032336;cursor:pointer;">
-      ⬅️ Voltar
-    </button>`;
-  setTimeout(()=>{
-    const backBtn=document.getElementById('back-investigation');
-    if(backBtn) backBtn.onclick=()=>showScreen('investigation');
-  },100);
-}
-
-document.querySelectorAll('.location-btn').forEach(btn=>{
-  btn.onclick=()=>{
-    let locationId = btn.dataset.location;
-    if(locationId === "crime-scene"){
-      renderLaboratorio();
-    } else {
-      document.getElementById('location-view').innerHTML =
-        `<h2>${locs[locationId].nome}</h2><p>${locs[locationId].descricao}</p>
-        <p style="opacity:.7"><i>Use o Scanner ou outro equipamento para encontrar pistas.</i></p>`;
-    }
-    atualizarPainelEvidencias();
-  };
-});
-
-document.getElementById('scanner-btn').onclick = () => {
-  let activeBtn = document.querySelector('.location-btn.active');
-  let locationId = activeBtn ? activeBtn.dataset.location : fases[faseAtual].locaisAbertos[0];
-  let pistas = fases[faseAtual].pistasPorLocal[locationId] || [];
-  
-  pistas.forEach(pista => {
-    if (!evidenciasDescobertas.includes(pista)) evidenciasDescobertas.push(pista);
-    if(locationId === "crime-scene" && pista === "Amostras alienígenas") pistaLabAtivada = true;
-  });
-  
-  if(locationId === "crime-scene"){
-    renderLaboratorio();
-    
-    // Eventos especiais da Fase 1
-    if(faseAtual === 0 && !eventosExecutados.includes('falha')) {
-      setTimeout(()=> {
-        let currentContent = document.getElementById('location-view').innerHTML;
-        document.getElementById('location-view').innerHTML = currentContent + "<hr>" + narrativaCompleta.eventoFalha;
-        eventosExecutados.push('falha');
-      }, 30000);
-      
-      setTimeout(()=> {
-        let currentContent = document.getElementById('location-view').innerHTML;
-        document.getElementById('location-view').innerHTML = currentContent + "<hr>" + narrativaCompleta.mensagemOculta;
-        eventosExecutados.push('mensagem');
-      }, 60000);
-    }
-  }else{
-    if(pistas.length > 0) {
-      renderImagemPista(pistas[0], locationId);
-    } else {
-      document.getElementById('location-view').innerHTML = `<h2>${locs[locationId].nome}</h2><p>${locs[locationId].descricao}</p><p><i>Nenhuma pista disponível neste local nesta fase.</i></p>`;
-    }
-  }
-  atualizarPainelEvidencias();
-};
+    if(ativo){let legenda=document.getElementById((btn.id||btn.dataset.location)+"-legenda"); if(legenda) legenda.style.dis
+              // Continuação dos eventos do jogo...
 
 document.getElementById('interrogate-btn').onclick=()=>{showScreen('suspects');};
+
 document.getElementById('aria-btn').onclick=()=>{
   document.getElementById('evidence-container').innerHTML+=`<div style="color:#71ffcb; margin-top:10px;">🤖 IA ARIA: "Detectando anomalias nos protocolos de segurança. Recomendo verificar logs de acesso para identificar atividades suspeitas."</div>`;
 };
+
 document.getElementById('sync-btn').onclick=()=>{
   document.getElementById('evidence-container').innerHTML+=`<div style="color:#32e6ff; margin-top:10px;">🔗 Sincronização completa! Dados compartilhados entre detetives. Novas evidências podem estar disponíveis.</div>`;
 };
 
+// Suspeitos - painel lateral
 function prepareSolutionScreen(){
   let killerSel=document.getElementById('killer-select');
   let accSel=document.getElementById('accomplice-select');
@@ -402,3 +396,27 @@ document.getElementById('submit-solution').onclick=()=>{
   }
   alert(msg);
 };
+
+// Exibição dos suspeitos se não estiver incluído no seu HTML
+function mountSuspects(){
+  const grid=document.getElementById('suspects-grid');
+  if(!grid) return;
+  grid.innerHTML=
+    suspectsData.map(s=>
+      `<div class="suspect-card"><h4>${s.emoji} ${s.nome}</h4>
+      <b>${s.cargo}</b><br>
+      <b>Motivo:</b> ${s.motivo}<br>
+      <b>Álibi:</b> ${s.alibi}</div>`
+    ).join('')+
+    `<div style="flex-basis:100%;height:0"></div>
+    <button id="back-investigation" style="margin:14px 0 5px 0;padding:10px 30px;background:#32e6ff;font-weight:700;border-radius:9px;color:#032336;cursor:pointer;">
+      ⬅️ Voltar
+    </button>`;
+  setTimeout(()=>{
+    const backBtn=document.getElementById('back-investigation');
+    if(backBtn) backBtn.onclick=()=>showScreen('investigation');
+  },100);
+}
+
+// Garante que sempre que iniciar, ou ao finalizar fase, reconfigure os botões de local
+updateRecursosEFiltros();
