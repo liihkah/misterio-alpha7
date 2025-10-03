@@ -1,117 +1,105 @@
-const narrativaCompleta = {
-  introducao: `
-    <div style="text-align:center; margin:20px;">
-      <h2 style="color:#ff6b6b;">🚨 ESTAÇÃO ALPHA-7 - 2087 🚨</h2>
-      <p><b>Protocolo de emergência ativado.</b></p>
-      <p>Alarmes tocam. ARIA: <i>"Incidente crítico, laboratório isolado."</i></p>
-      <p>Última gravação: <b>"Eles descobriram... O Projeto Genesis não pode sair daqui vivo..."</b></p>
-    </div>
-  `,
-  laboratorioInicial: `<b>🔬 Laboratório Principal</b><br>O local está em completa desordem. Elena jaz no chão, vidro quebrado por toda parte, amostras brilhando em verde neon. Terminal piscando: <b>GAMMA-7 — acesso negado</b>.`,
-  pistaAmostras: `<b>🧬 Amostras Manipuladas</b><br>Scanner revela: nanobots clandestinos nas amostras! ARIA: "Elena investigava protocolos indevidos."`,
-  eventoFalha: `<b>⚡ Falha no sistema!</b> ARIA: "Detectando anomalias... alguém está alterando minha programação!"`,
-  mensagemOculta: `<b>Mensagem oculta:</b> <code>PROCUREM GAMMA-7. AS SERPENTES ESTÃO NO NINHO. -E.V.</code>`,
-  inicioFase2: `<h2>Fase 2: Investigação</h2><p>Setores Comando e Criogenia liberados. Novas rotas, mais segredos.</p>`,
-  centroComandoInicial: `<b>🖥️ Centro de Comando</b><br>O console ativou logout forçado minutos antes da morte. ARIA está inquieta: "Detectei tentativas de acesso não autorizado."</p>`,
-  pistaLogsAcesso: `
-    <b>LOGS CRÍTICOS:</b>
-    <ul>
-      <li>03:47 — Webb acessa o laboratório.</li>
-      <li>04:15 — tentativa de acesso negada a GAMMA-7.</li>
-      <li>04:52 — protocolo ARIA alterado.</li>
-      <li>05:12 — logout forçado.</li>
-    </ul>
-    <p><b>Evidência clara:</b> Webb estava atuando perto do horário do crime.</p>`,
-  pistaAlertasSistema: `<b>⚠️ Alertas ocultados</b><br>Falhas e manipulações marcadas pelo sistema como "falso positivo".`,
-  pistaFitaAudio: `<b>Áudio captado:</b> "Eles querem usar tudo que achamos como arma!"`,
-  criogenicoInicial: `<b>🧊 Módulo Criogênico</b><br>Etiquetas mostram amostras Gamma-7 removidas. Câmaras abertas. Rastro direto para Webb e sua cúmplice.`,
-  pistaSeringas: `<b>Seringas de nanobots</b> contêm digitais de Webb. Equipamento avançado para manipulação genética clandestina.`,
-  inicioFase3: `<h2>Fase 3: Confrontação</h2><p>Setores Médico e Reator liberados. As últimas peças do quebra-cabeça.</p>`,
-  centroMedicoInicial: `<b>Centro Médico</b><br>Relatório de autópsia indica nanobots no sangue de Elena. Terminais com tentativas de deletar arquivos.`,
-  pistaHistoricoMedico: `<b>Histórico secreto:</b> Elena fazia exames para detectar anomalias em seu próprio sangue. Todos apontam: Webb era o único com acesso para adulterar esses arquivos.`,
-  pistaNanobots: `<b>Nanobots híbridos</b>: tecnologia além dos padrões humanos, com módulo de autodestruição ativável remotamente.`,
-  pistaAutopsia: `<b>Relatório de autópsia:</b> Assinado (e depois apagado) por Webb: "Morte: falha neural induzida por nanobot ativado externamente."`,
-  reatorInicial: `<b>⚛️ Núcleo do Reator</b><br>Alarmes de radiação! Alguém alterou as configurações de segurança para provocar autodestruição.`,
-  pistaNiveisRadiacao: `<b>ALERTA:</b> Protocolos sabotados às 04:30; tentativa de destruição agendada para logo após o crime.`,
-  eventoSabotagem: `<b>SABOTAGEM EM ANDAMENTO!</b> Explosões logo virão. ARIA: "Webb e Zara estão tentando escapar..."`,
-  confrontoFinal: `<h2>Confronto Final</h2><b>Webb e Zara são os responsáveis!</b> Apresente sua acusação antes que destruam todas as provas.`,
-  pistaResiduoNanobots: `<b>Resíduo de nanobots:</b> Ativação às 05:41 pelo terminal do Dr. Webb.`,
-  pistaTerminalHackeado: `<b>Terminal de Elena hackeado:</b> Webb tentou apagar tudo, mas Elena escondeu cópias de segurança!`
+const narrativa = {
+  intro: `<h2>🚨 ESTAÇÃO ALPHA-7 — 2087 🚨</h2>
+    <p><b>Protocolo de emergência ativado!</b><br>ALARME: <i>Incidente crítico detectado.<br>Laboratório isolado.</i></p>
+    <p>Última gravação de Elena: "Eles descobriram... O Projeto Genesis não pode sair daqui vivo..."</p>`,
+  laboratorio: `<b>Laboratório Principal</b><br>Elena no chão, amostras alienígenas derramadas e terminal com <b>GAMMA-7 — acesso negado</b>.`,
+  amostras: `<b>Pista: Amostras Manipuladas</b><br>Scan detecta nanobots avançados. ARIA: "Elena investigava protocolos ilegais."`,
+  fail: `<b>⚡ Falha Sistêmica!</b> ARIA: "Detectando anomalias nos meus protocolos..."`,
+  command: `<b>Centro de Comando</b><br>Console mostra login abortado às 05:12, minutos antes do crime.`,
+  logs: `<b>LOGS:</b><ul><li>03:47 — Webb acessa laboratório.</li><li>04:52 — Protocolo ARIA alterado.</li></ul>`,
+  alertas: `<b>Alertas ocultados</b>: alguém alterou registros do sistema.`,
+  cryo: `<b>Módulo Criogênico</b><br>Registros mostram remoção recente das amostras Gamma-7.`,
+  seringas: `<b>Seringas de Nanobots</b> com digitais de Webb.`,
+  medical: `<b>Centro Médico</b><br>Relatórios provam que Elena vinha sofrendo alterações neurais.`,
+  autopsia: `<b>Autópsia</b>: Nanobots no sangue de Elena, ativados pouco antes da morte.`,
+  reactor: `<b>Núcleo do Reator</b><br>Radiação desestabilizada, tentativa clara de sabotagem.`,
+  final: `<h2>Confronto Final</h2><p>Todos os dados apontam para Webb e cúmplice. Acuse!</p>`
 };
 
-// Dados e lógica
+const locNames = {
+  "crime-scene":"Laboratório",
+  "command":"Comando",
+  "cryogenic":"Criogenia",
+  "medical":"Médico",
+  "reactor":"Reator"
+};
+
 const fases = [
-  { tempo:120, locais:["crime-scene"], pistas:{ "crime-scene":["laboratorioInicial","pistaAmostras"] } },
+  { tempo:120, locais:["crime-scene"], pistas:{ "crime-scene":["laboratorio","amostras","fail"] } },
   { tempo:180, locais:["crime-scene","command","cryogenic"], pistas:{
-      "command":["centroComandoInicial","pistaLogsAcesso","pistaAlertasSistema","pistaFitaAudio"],
-      "cryogenic":["criogenicoInicial","pistaSeringas"]
+      "command":["command","logs","alertas"],
+      "cryogenic":["cryo","seringas"]
     }
   },
   { tempo:240, locais:["crime-scene","command","cryogenic","medical","reactor"], pistas:{
-      "medical":["centroMedicoInicial","pistaHistoricoMedico","pistaNanobots","pistaAutopsia"],
-      "reactor":["reatorInicial","pistaNiveisRadiacao"],
-      "crime-scene":["pistaResiduoNanobots","pistaTerminalHackeado"]
+      "medical":["medical","autopsia"],
+      "reactor":["reactor"]
     }
   }
 ];
-const locNames = {
-  "crime-scene":"Laboratório Principal",
-  "command":"Centro de Comando",
-  "cryogenic":"Módulo Criogênico",
-  "medical":"Centro Médico",
-  "reactor":"Núcleo do Reator"
-};
 
-let faseAtual=0, seg=0, tInt=null, localAtual="crime-scene", pistasObtidas=[];
+let faseAtual=0, tempo=0, intervalo=null, localAtual="crime-scene", evidencias=[];
 
-// UI & Timer
 function atualizarTimer(){
-  let m = String(Math.floor(seg/60)).padStart(2,'0'), s = String(seg%60).padStart(2,'0');
-  document.getElementById("phase-timer").innerText = `${m}:${s}`;
-  if (seg>0) seg--; else clearInterval(tInt);
+  tempo = Math.max(tempo-1,0);
+  let m=String(Math.floor(tempo/60)).padStart(2,"0"), s=String(tempo%60).padStart(2,"0");
+  document.getElementById("phase-timer").innerText=`${m}:${s}`;
+  if(!tempo) clearInterval(intervalo);
 }
-function iniciarFase(){
-  seg = fases[faseAtual].tempo;
-  clearInterval(tInt);
-  tInt = setInterval(atualizarTimer,1000);
-  atualizarTimer();
+function startFase(){
+  tempo=fases[faseAtual].tempo;
+  clearInterval(intervalo); atualizarTimer();
+  intervalo=setInterval(atualizarTimer,1000);
 }
-function showScreen(id){
-  document.querySelectorAll(".screen").forEach(d=>d.style.display="none");
-  document.getElementById(id).style.display="block";
-}
-function atualizarPistas(){
-  document.getElementById('evidence-container').innerHTML = pistasObtidas.length?
-    `<ul>${pistasObtidas.map(p=>`<li>${p}</li>`).join('')}</ul>` : '';
-}
-// Início
-window.onload = ()=>{
-  document.querySelectorAll(".select-role").forEach(b=>{
-    b.onclick=()=>{
-      showScreen("investigation");
-      iniciarFase();
-      document.getElementById("location-view").innerHTML = narrativaCompleta.introducao;
-      atualizarPistas();
+
+// Seleção do detetive
+window.addEventListener("DOMContentLoaded", ()=>{
+  document.querySelectorAll('.select-role').forEach(btn=>{
+    btn.onclick=()=>{
+      document.getElementById('detective-selection').style.display='none';
+      document.getElementById('investigation').style.display='block';
+      faseAtual=0; evidencias=[]; localAtual="crime-scene";
+      startFase();
+      document.getElementById('location-view').innerHTML=narrativa.intro;
+      document.getElementById('evidence-container').innerHTML="";
     };
   });
-};
+});
+
 // Locais
-document.querySelectorAll(".location-btn").forEach(b=>{
+document.querySelectorAll('.location-btn').forEach(b=>{
   b.onclick=()=>{
     localAtual=b.dataset.location;
-    let narrKey = fases[faseAtual].pistas[localAtual]?.[0];
-    document.getElementById("location-view").innerHTML = narrativaCompleta[narrKey]||"<p>Vazio</p>";
+    document.getElementById('location-view').innerHTML = narrativa[localAtual]||`<h3>${locNames[localAtual]}</h3>`;
   };
 });
-// Scanner
-document.getElementById("scanner-btn").onclick=()=>{
+
+// Scanner revela pistas sequenciais na fase/local
+document.getElementById('scanner-btn').onclick=()=>{
   let ps = fases[faseAtual].pistas[localAtual]||[];
-  ps.forEach(pk=>{
-    if (!pistasObtidas.includes(narrativaCompleta[pk])) pistasObtidas.push(narrativaCompleta[pk]);
-    document.getElementById("location-view").innerHTML = narrativaCompleta[pk];
-  });
-  atualizarPistas();
+  let nova = ps.find(p=>!evidencias.includes(p));
+  if(nova){
+    evidencias.push(nova);
+    document.getElementById('location-view').innerHTML=narrativa[nova];
+  }else{
+    document.getElementById('location-view').innerHTML=`<b>Você já analisou todas as pistas deste local nesta fase.</b>`;
+  }
+  document.getElementById('evidence-container').innerHTML =
+    evidencias.map(p=>`<div>${narrativa[p]}</div>`).join('');
 };
-document.getElementById("aria-btn").onclick=()=>alert("ARIA: Verifique logs suspeitos!");
-document.getElementById("sync-btn").onclick=()=>alert("Sincronizado.");
-document.getElementById("interrogate-btn").onclick=()=>alert("Interrogatório só após investigação avançada!");
+
+// Equipamentos
+document.getElementById('aria-btn').onclick=()=>alert("ARIA: Verifique os logs e registros do comando.");
+document.getElementById('sync-btn').onclick=()=>alert("Sincronização completa.");
+document.getElementById('interrogate-btn').onclick=()=>alert("Função de interrogatório disponível nas próximas fases.");
+
+// Fase seguinte ou final (exemplo básico)
+document.getElementById('phase-timer').onclick=()=>{
+  if(faseAtual<fases.length-1){
+    faseAtual++; evidencias=[]; localAtual="crime-scene"; startFase();
+    document.getElementById('location-view').innerHTML=narrativa.intro;
+    document.getElementById('evidence-container').innerHTML="";
+  }else{
+    document.getElementById('location-view').innerHTML=narrativa.final;
+  }
+};
