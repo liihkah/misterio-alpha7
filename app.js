@@ -14,7 +14,7 @@ let selectedRole = null;
 
 // Fases e pistas específicas
 let fases = [
-  { nome: "Fase 1: Descoberta", tempo: 300, // 5 min
+  { nome: "Fase 1: Descoberta", tempo: 300,
     pistasPorLocal: {
       "crime-scene": ["Amostras alienígenas"],
       "command": [],
@@ -25,7 +25,7 @@ let fases = [
     locaisAbertos: ["crime-scene"],
     equipamentosAtivos: ["scanner-btn"]
   },
-  { nome: "Fase 2: Investigação", tempo: 600, // 10 min
+  { nome: "Fase 2: Investigação", tempo: 600,
     pistasPorLocal: {
       "crime-scene": ["Amostras alienígenas", "Terminal hackeado"],
       "command": ["Logs de acesso", "Alertas de sistema", "Fita de áudio"],
@@ -36,7 +36,7 @@ let fases = [
     locaisAbertos: ["crime-scene", "command", "cryogenic"],
     equipamentosAtivos: ["scanner-btn","interrogate-btn","aria-btn","sync-btn"]
   },
-  { nome: "Fase 3: Confrontação", tempo: 600, // 10 min
+  { nome: "Fase 3: Confrontação", tempo: 600,
     pistasPorLocal: {
       "crime-scene": ["Amostras alienígenas", "Terminal hackeado", "Resíduo de nanobots"],
       "command": ["Logs de acesso", "Alertas de sistema", "Fita de áudio"],
@@ -47,8 +47,8 @@ let fases = [
     locaisAbertos: ["crime-scene", "command", "cryogenic", "medical", "reactor"],
     equipamentosAtivos: ["scanner-btn","interrogate-btn","aria-btn","sync-btn"]
   },
-  { nome: "Fase 4: Resolução", tempo: 300, // 5 min
-    pistasPorLocal: {}, // Apenas acusação final
+  { nome: "Fase 4: Resolução", tempo: 300,
+    pistasPorLocal: {},
     locaisAbertos: [],
     equipamentosAtivos: ["sync-btn"]
   }
@@ -58,7 +58,7 @@ let faseAtual = 0;
 let seconds = fases[faseAtual].tempo;
 let timerInt = null;
 
-// Funções por fase e restrição real de recursos
+// Atualiza timer, restrições e interface
 function updateTimer() {
   let min = String(Math.floor(seconds/60)).padStart(2,'0');
   let sec = String(seconds % 60).padStart(2,'0');
@@ -97,26 +97,30 @@ function showScreen(id) {
   document.getElementById(id).classList.add('active');
 }
 
-// Restrições e evidências por fase/local
+// Indicação de recursos bloqueados "EM BREVE"
 function updateRecursosEFiltros() {
   const equipamentos = ["scanner-btn","interrogate-btn","aria-btn","sync-btn"];
   equipamentos.forEach(id=>{
-    document.getElementById(id).disabled = !(fases[faseAtual].equipamentosAtivos.includes(id));
+    let el = document.getElementById(id);
+    let ativo = fases[faseAtual].equipamentosAtivos.includes(id);
+    el.disabled = !ativo;
+    el.style.opacity = ativo ? 1 : 0.5;
+    el.title = ativo ? "" : "Disponível na próxima fase";
+    if (!ativo && !el.innerText.includes("(EM BREVE)")) el.innerText += " (EM BREVE)";
+    if (ativo) el.innerText = el.innerText.replace(" (EM BREVE)","");
   });
   document.querySelectorAll('.location-btn').forEach(btn=>{
-    btn.disabled = !(fases[faseAtual].locaisAbertos.includes(btn.dataset.location));
-    if (btn.disabled) btn.style.opacity = 0.5; else btn.style.opacity = 1;
+    let ativo = fases[faseAtual].locaisAbertos.includes(btn.dataset.location);
+    btn.disabled = !ativo;
+    btn.style.opacity = ativo ? 1 : 0.5;
+    btn.title = ativo ? "" : "Disponível na próxima fase";
+    if (!ativo && !btn.innerText.includes("💡 EM BREVE")) btn.innerText += " 💡 EM BREVE";
+    if (ativo) btn.innerText = btn.innerText.replace(" 💡 EM BREVE","");
   });
-
-  // Mostra pistas atualizadas para o local selecionado
-  let locationId = fases[faseAtual].locaisAbertos[0] || "crime-scene"; // local padrão aberto
-  const pistas = fases[faseAtual].pistasPorLocal[locationId] || [];
-  let html = pistas.length === 0 ? "<i>Sem pistas disponíveis aqui nesta fase.</i>" : "<ul>" +
-              pistas.map(p=>`<li>${p}</li>`).join("") + "</ul>";
-  document.getElementById('location-view').innerHTML = `<h2>${locs[locationId].nome}</h2><p>${locs[locationId].descricao}</p>` + html;
-  document.getElementById('evidence-container').innerHTML = 
-    pistas.length === 0 ? `<b>Sem pistas exibidas nesta etapa.</b>` : `<b>Pistas disponíveis:</b> <br>` + pistas.join("<br>");
-
+  // Apresenta apenas o local, sem pistas iniciais
+  let locationId = fases[faseAtual].locaisAbertos[0] || "crime-scene";
+  document.getElementById('location-view').innerHTML = `<h2>${locs[locationId].nome}</h2><p>${locs[locationId].descricao}</p><p style="opacity:.7"><i>Use o Scanner ou outro equipamento para encontrar pistas.</i></p>`;
+  document.getElementById('evidence-container').innerHTML = `<b>Nenhuma pista exibida ainda.</b>`;
   if(faseAtual === fases.length - 1){
     document.getElementById('evidence-container').innerHTML = "<b>Última fase: Prepare-se para acusar!</b>";
   }
@@ -154,7 +158,7 @@ function mountSuspects() {
   },100);
 }
 
-// Locais e exibição
+// Locais da estação
 const locs = {
   "crime-scene": {
     nome: "Laboratório Principal", evidencias: ["Amostras alienígenas", "Terminal hackeado", "Resíduo de nanobots"],
@@ -181,18 +185,19 @@ const locs = {
 document.querySelectorAll('.location-btn').forEach(btn => {
   btn.onclick = () => {
     let locationId = btn.dataset.location;
-    const pistas = fases[faseAtual].pistasPorLocal[locationId] || [];
-    let html = pistas.length === 0 ? "<i>Sem pistas disponíveis aqui nesta fase.</i>" : "<ul>" +
-              pistas.map(p=>`<li>${p}</li>`).join("") + "</ul>";
-    document.getElementById('location-view').innerHTML = `<h2>${locs[locationId].nome}</h2><p>${locs[locationId].descricao}</p>` + html;
-    document.getElementById('evidence-container').innerHTML = 
-      pistas.length === 0 ? `<b>Sem pistas exibidas nesta etapa.</b>` : `<b>Pistas disponíveis:</b> <br>` + pistas.join("<br>");
+    document.getElementById('location-view').innerHTML = `<h2>${locs[locationId].nome}</h2><p>${locs[locationId].descricao}</p><p style="opacity:.7"><i>Use o Scanner ou outro equipamento para encontrar pistas.</i></p>`;
+    document.getElementById('evidence-container').innerHTML = `<b>Nenhuma pista exibida ainda.</b>`;
   };
 });
 
-// Ferramentas
+// Scanner: só mostra pistas ao clicar
 document.getElementById('scanner-btn').onclick = () => {
-  document.getElementById('evidence-container').innerHTML += `<div>🔍 Scanner ativado — pistas reveladas!</div>`;
+  let locationId = fases[faseAtual].locaisAbertos.find(loc=>!document.querySelector('.location-btn[data-location="'+loc+'"]').disabled) || "crime-scene";
+  const pistas = fases[faseAtual].pistasPorLocal[locationId] || [];
+  let html = pistas.length === 0 ? "<i>Nenhuma pista disponível neste local nesta fase.</i>" : "<ul>"+pistas.map(p=>`<li>${p}</li>`).join("")+"</ul>";
+  document.getElementById('location-view').innerHTML = `<h2>${locs[locationId].nome}</h2><p>${locs[locationId].descricao}</p>` + html;
+  document.getElementById('evidence-container').innerHTML =
+    pistas.length === 0 ? `<b>Sem pistas para mostrar.</b>` : `<b>Pistas encontradas:</b><br>`+pistas.join("<br>");
 };
 document.getElementById('interrogate-btn').onclick = () => {
   showScreen('suspects');
