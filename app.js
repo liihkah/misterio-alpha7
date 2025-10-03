@@ -1,4 +1,3 @@
-// Dados dos suspeitos e métodos
 const suspectsData = [
   { nome: "Comandante Sarah Chen", cargo: "Comandante da Estação", motivo: "Elena questionava suas decisões", alibi: "Centro de Comando", emoji: "⚔️" },
   { nome: "Dr. Marcus Webb", cargo: "Biólogo Chefe", motivo: "Experimentos não autorizados", alibi: "Módulo de Criogenia", emoji: "🔬" },
@@ -10,7 +9,6 @@ const suspectsData = [
 ];
 const methods = ["Nanotecnologia Letal", "Despressurização", "Overdose Neural", "Radiação", "Vírus Sintético"];
 
-// Fases
 let fases = [
   { nome: "Fase 1: Descoberta", tempo: 120,
     pistasPorLocal: { "crime-scene": ["Amostras alienígenas"] },
@@ -48,13 +46,11 @@ let faseAtual = 0;
 let seconds = fases[faseAtual].tempo;
 let timerInt = null;
 let selectedRole = null;
+let evidenciasDescobertas = []; // Acumular as pistas
 
-// NOVO: Array para armazenar todas as pistas encontradas
-let evidenciasDescobertas = [];
-
-// Painel central do laboratório, com possibilidade de dica
+// Painel central do laboratório, com PNG
 function renderLaboratorio(pista=false){
-  let imgSrc = pista ? "lab_pista.jpg" : "lab_inicial.jpg";
+  let imgSrc = pista ? "lab_pista.png" : "lab_inicial.png";
   let dicaHtml = pista ? "<div style='margin-top:10px; color:#71ffcb;font-size:1.1em;text-align:center;'>Dica: Amostras alienígenas encontradas.</div>" : "";
   let html = `
     <div style="width:100%;text-align:center">
@@ -84,7 +80,6 @@ function startTimer(){
   timerInt = setInterval(updateTimer,1000);
 }
 
-// Legenda de bloqueados
 function criarLegendaBloqueado(id,texto){
   let btn = document.getElementById(id);
   let legendaId = id+"-legenda";
@@ -100,7 +95,6 @@ function criarLegendaBloqueado(id,texto){
   legenda.style.display="block";
 }
 
-// Painel de evidências (agora mostrando todas acumuladas)
 function atualizarPainelEvidencias() {
   if (evidenciasDescobertas.length === 0) {
     document.getElementById('evidence-container').innerHTML = `<b>Nenhuma pista exibida ainda.</b>`;
@@ -112,7 +106,6 @@ function atualizarPainelEvidencias() {
   }
 }
 
-// Atualiza botões e central
 function updateRecursosEFiltros(){
   const equipamentos = ["scanner-btn","interrogate-btn","aria-btn","sync-btn"];
   equipamentos.forEach(id=>{
@@ -128,14 +121,11 @@ function updateRecursosEFiltros(){
     criarLegendaBloqueado(btn.id||btn.dataset.location,"Disponível na fase 2");
     if(ativo){let legenda=document.getElementById((btn.id||btn.dataset.location)+"-legenda"); if(legenda) legenda.style.display="none";}
   });
-  // Central da fase 1
   if(faseAtual===0){renderLaboratorio(false);}
   else if(faseAtual===fases.length-1){document.getElementById('evidence-container').innerHTML="<b>Última fase: Prepare-se para acusar!</b>";}
-  // Sempre atualiza painel lateral de evidências
   atualizarPainelEvidencias();
 }
 
-// Avança a fase
 function avancarFase(){
   if(faseAtual<fases.length-1){
     faseAtual++;seconds=fases[faseAtual].tempo;
@@ -146,7 +136,6 @@ function avancarFase(){
   }
 }
 
-// Navegação
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(e=>e.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -157,7 +146,7 @@ window.addEventListener("DOMContentLoaded",()=>{
   document.querySelectorAll('.select-role').forEach(btn=>{
     btn.onclick=()=>{
       selectedRole=btn.dataset.role;
-      evidenciasDescobertas = []; // ao iniciar nova partida, limpa o histórico!
+      evidenciasDescobertas = [];
       showScreen('investigation');
       mountSuspects();
       prepareSolutionScreen();
@@ -167,7 +156,6 @@ window.addEventListener("DOMContentLoaded",()=>{
   });
 });
 
-// Suspeitos e botão de voltar
 function mountSuspects(){
   const grid=document.getElementById('suspects-grid');
   if(!grid) return;
@@ -188,7 +176,6 @@ function mountSuspects(){
   },100);
 }
 
-// Locais da estação
 const locs = {
   "crime-scene": {
     nome: "Laboratório Principal",
@@ -213,7 +200,6 @@ const locs = {
   }
 };
 
-// Locais
 document.querySelectorAll('.location-btn').forEach(btn=>{
   btn.onclick=()=>{
     let locationId=btn.dataset.location;
@@ -226,14 +212,12 @@ document.querySelectorAll('.location-btn').forEach(btn=>{
   };
 });
 
-// Scanner: salva pistas e mantém acumuladas
 document.getElementById('scanner-btn').onclick=()=>{
   let locationId = fases[faseAtual].locaisAbertos[0];
   const pistas = fases[faseAtual].pistasPorLocal[locationId] || [];
   pistas.forEach(pista => {
     if (!evidenciasDescobertas.includes(pista)) evidenciasDescobertas.push(pista);
   });
-  // Atualiza central visual
   if(faseAtual===0){
     renderLaboratorio(true);
   }else{
@@ -246,7 +230,6 @@ document.getElementById('interrogate-btn').onclick=()=>{showScreen('suspects');}
 document.getElementById('aria-btn').onclick=()=>{document.getElementById('evidence-container').innerHTML+=`<div>🤖 IA ARIA: verifique logs para anomalia!</div>`;};
 document.getElementById('sync-btn').onclick=()=>{document.getElementById('evidence-container').innerHTML+=`<div>🔗 Descobertas sincronizadas entre detetives!</div>`;};
 
-// Solução final
 function prepareSolutionScreen(){
   let killerSel=document.getElementById('killer-select');
   let accSel=document.getElementById('accomplice-select');
